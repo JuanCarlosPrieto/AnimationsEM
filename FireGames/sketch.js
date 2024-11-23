@@ -1,8 +1,9 @@
-const gravity = 0.05;
+const gravity = 0.03;
 let rockets = [];
 let lilRockets = [];
 const radio_rocket = 15;
 const radio_little = radio_rocket / 3;
+const radio_explosion = 12;
 
 const colors = [[255, 0, 0],
                 [0, 255, 0],
@@ -12,6 +13,7 @@ const colors = [[255, 0, 0],
                 [252, 75, 8]]
 
 function setup() {
+    noStroke();
     createCanvas(document.documentElement.clientWidth, document.documentElement.clientHeight); 
     background(0); 
 }
@@ -35,7 +37,7 @@ function draw() {
 
 function update() {
     if (Math.random() < 0.02) {
-        rockets.push(new Rocket(Math.random() * document.documentElement.clientWidth, document.documentElement.clientHeight, 0, -4 + Math.random() * (-3)));
+        rockets.push(new Rocket(Math.random() * document.documentElement.clientWidth, document.documentElement.clientHeight, 0, -3 + Math.random() * (-2)));
     }
 
     for (let i = 0; i < rockets.length; i++) {
@@ -50,11 +52,15 @@ function update() {
             rockets.pop();
             i--;
             
-            const number_little = Math.floor(Math.random() * 50) + 100;
+            const number_little = Math.floor(Math.random() * 150) + 200;
             for (let i = 0; i < number_little; i++) {
-                const lil_x = -5 + gaussianRandom(0.5, 1)*10 + x;
-                const lil_y = -5 + gaussianRandom()*10 + y;
-                lilRockets.push(new Rocket(lil_x, lil_y, (lil_x - x)*Math.random() * 0.75, (lil_y - y)*Math.random() * 0.75, color_rocket));
+                const radius = radio_explosion + gaussianRandom(5,0.5);
+                const angle = Math.random() * Math.PI * 2;
+
+                const lil_x = x + radius * Math.cos(angle);
+                const lil_y = y + radius * Math.sin(angle);
+                
+                lilRockets.push(new Rocket(lil_x, lil_y, (lil_x - x)* Math.random() * 0.15, (lil_y - y)* Math.random() * 0.15, color_rocket));
             }
         }
     }
@@ -79,6 +85,10 @@ function gaussianRandom(mean = 0, stdDev = 1) {
     return z0 * stdDev + mean;
 }
 
+function distance(x1, y1, x2, y2) {
+    return Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
+}
+
 
 class Rocket {
     constructor(x, y, speedx, speedy, color = colors[Math.floor(Math.random() * colors.length)]) {
@@ -97,7 +107,7 @@ class Rocket {
         this.x += this.speedx;
         this.y += this.speedy;
 
-        if (this.speedy > 0) {
+        if (this.speedy > 3) {
             if (this.color[0] > 0) {
                 this.color[0] -= 0.001;
             }

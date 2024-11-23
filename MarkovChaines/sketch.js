@@ -83,7 +83,6 @@ function draw() {
     fill(255, 0, 0);
     
     drawArrows(arrows);
-    drawNodes(nodes);
 
     fill(movingPointColor);
     noStroke();
@@ -116,6 +115,8 @@ function draw() {
     if (t >= 1) {
         t = 0;
     }
+    
+    drawNodes(nodes);
 }
 
 

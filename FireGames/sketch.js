@@ -91,7 +91,7 @@ function distance(x1, y1, x2, y2) {
 
 
 class Rocket {
-    constructor(x, y, speedx, speedy, color = colors[Math.floor(Math.random() * colors.length)]) {
+    constructor(x, y, speedx, speedy, color = [...colors[Math.floor(Math.random() * colors.length)]]) {
         this.x = x;
         this.y = y;
         this.speedx = speedx;
@@ -107,7 +107,7 @@ class Rocket {
         this.x += this.speedx;
         this.y += this.speedy;
 
-        if (this.speedy > 3) {
+        if (this.speedy > 0) {
             if (this.color[0] > 0) {
                 this.color[0] -= 0.001;
             }
